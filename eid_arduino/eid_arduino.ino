@@ -24,6 +24,35 @@ void(*insert)();
 void(*eject)();
 int printed = 0;
 
+void printStatus() {
+  switch(curr) {
+    case STOPPED:
+      Serial.println("stopped");
+      break;
+    case EJECTED:
+      Serial.println("ejected");
+      break;
+    case INSERTED:
+      Serial.println("inserted");
+      break;
+    case PARKED:
+      Serial.println("parked");
+      break;
+    case MOVING_LEFT:
+      Serial.println("moving left");
+      break;
+    case MOVING_RIGHT:
+      Serial.println("moving right");
+      break;
+    case ERROR:
+      Serial.println("error");
+      break;
+    default:
+      Serial.println("unknown state");
+      break;
+  }
+}
+
 void turnLeft() {
   analogWrite(engineRight, 0);
   analogWrite(engineLeft, turnSpeed);
@@ -103,21 +132,7 @@ void loop() {
     digitalWrite(led, LOW);
     if(!printed) {
       printed = 1;
-      switch(curr) {
-        case STOPPED:
-          Serial.println("stop");
-          printed = 0;
-          break;
-        case EJECTED:
-          Serial.println("ejected");
-          break;
-        case INSERTED:
-          Serial.println("inserted");
-          break;
-        case PARKED:
-          Serial.println("parked");
-          break;
-      }
+      printStatus();
     }
   }
 
@@ -145,6 +160,7 @@ void loop() {
     target = (tstate)curr;
   }
   if(Serial.available() > 0) {
+    printed = 0;
     switch(Serial.read()) {
       case 'i':
       case 'I':
@@ -162,7 +178,12 @@ void loop() {
       case 'P':
         target = PARK;
         break;
+      case 'w':
+      case 'W':
+        printStatus();
+        printed=1;
+      default:
+        break;
     }
-    printed = 0;
   }
 }

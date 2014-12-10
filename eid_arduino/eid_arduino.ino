@@ -102,7 +102,8 @@ void setup() {
 void loop() {
   int inSensorState;
   int ejSensorState;
-  
+  int c;
+
   if(target != curr) {
     digitalWrite(led, HIGH);
     printed = 0;
@@ -161,25 +162,25 @@ void loop() {
   }
   if(Serial.available() > 0) {
     printed = 0;
-    switch(Serial.read()) {
+    c = Serial.read();
+    if(c <0x60) {
+      delay(200);
+    }
+    c |= 0x20;
+    switch(c) {
       case 'i':
-      case 'I':
         target = INSERT;
         break;
       case 'e':
-      case 'E':
         target = EJECT;
         break;
       case 's':
-      case 'S':
         target = STOP;
         break;
       case 'p':
-      case 'P':
         target = PARK;
         break;
       case 'w':
-      case 'W':
         printStatus();
         printed=1;
       default:

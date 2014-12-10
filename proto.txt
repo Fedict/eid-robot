@@ -1,0 +1,27 @@
+9600 baud
+
+Available commands:
+
+i: insert card
+e: eject card
+p: park arm (place it somewhere between insert and eject)
+s: stop movement
+w: "where" -- request current status of the robot
+r: ready? (if so, robot will reply with "READY.\n")
+
+The robot will always report state when the arm stops moving, with one of the
+following:
+"inserted\n": arm is inserted
+"ejected\n": arm is ejected
+"parked\n": the arm is somewhere between "inserted" and "ejected"
+
+When the 'w' command is issued, the following are also possible:
+"moving left\n": the engine is moving "leftwards".
+"moving right\n": the engine is moving "rightwards".
+"error\n": an error was detected.
+"unknown state\n": Probably a programmer error.
+
+What's "left" and "right" isn't defined, but it should be the same thing
+as long as you don't change the wiring, or swap out the robot's engine.
+
+What's "in" or "out" might change from one run to another, however.

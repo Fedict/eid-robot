@@ -77,9 +77,6 @@ void setup() {
   pinMode(led, OUTPUT);
   analogWrite(engineLeft, 0);
   analogWrite(engineRight, 0);
-  while(!Serial) {
-    ;
-  }
   Serial.begin(9600);
   turnLeft();
   while(curr != INSERTED && curr != EJECTED) {
@@ -96,7 +93,6 @@ void setup() {
       eject = turnLeft;
     }
   }
-  Serial.println("READY.");
 }
 
 void loop() {
@@ -179,6 +175,10 @@ void loop() {
         break;
       case 'p':
         target = PARK;
+        break;
+      case 'r':
+        Serial.println("READY.");
+        printed=1;
         break;
       case 'w':
         printStatus();

@@ -2,7 +2,7 @@ int inSensor = 5;
 int ejSensor = 2;
 int engineLeft = 3;
 int engineRight = 11;
-int engineSensor = 7;
+int engineSensor = 7; // this doesn't actually seem to work, unfortunately
 int led = 13;
 int turnSpeed = 255;
 enum tstate {

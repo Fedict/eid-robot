@@ -144,6 +144,10 @@ void loop() {
   if(inSensorState == LOW && ejSensorState == LOW && target == PARK) {
     stopMove();
   }
+  if(inSensorState == HIGH && ejSensorState == HIGH) {
+    curr = ERROR;
+    eject();
+  }
   if(curr == STOPPED) {
     if(inSensorState == HIGH) {
       curr = INSERTED;

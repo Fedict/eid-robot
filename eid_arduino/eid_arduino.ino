@@ -10,6 +10,8 @@ enum tstate {
   EJECT = 1,
   INSERT = 2,
   PARK = 3,
+  PARKINSERT = 10,
+  PARKEJECT = 11,
 } target = INSERT;
 enum cstate {
   STOPPED = 0,
@@ -114,6 +116,8 @@ void loop() {
         insert();
         break;
       case PARK:
+      case PARKEJECT:
+      case PARKINSERT:
         if(curr == INSERTED) {
           eject();
         }
@@ -141,7 +145,7 @@ void loop() {
   if(inSensorState == HIGH && target == INSERT) {
     stopMove();
   }
-  if(inSensorState == LOW && ejSensorState == LOW && target == PARK) {
+  if(inSensorState == LOW && ejSensorState == LOW && (target == PARK || target == PARKEJECT || target == PARKINSERT)) {
     stopMove();
   }
   if(inSensorState == HIGH && ejSensorState == HIGH) {
@@ -156,6 +160,12 @@ void loop() {
     } else {
       curr = PARKED;
     }
+    if(target == PARKEJECT) {
+      target = EJECT;
+    }
+    if(target == PARKINSERT) {
+      target = INSERT;
+    }
   }
   if(target == STOP) {
     target = (tstate)curr;
@@ -169,10 +179,18 @@ void loop() {
     c |= 0x20;
     switch(c) {
       case 'i':
-        target = INSERT;
+        if (target == EJECT && curr == INSERTED) {
+          target = PARKINSERT;
+        } else {
+          target = INSERT;
+        }
         break;
       case 'e':
-        target = EJECT;
+        if (target == INSERT && curr == EJECTED) {
+          target = PARKEJECT;
+        } else {
+          target = EJECT;
+        }
         break;
       case 's':
         target = STOP;

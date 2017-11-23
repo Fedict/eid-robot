@@ -183,16 +183,16 @@ void loop() {
 
   inSensorState = digitalRead(inSensor);
   ejSensorState = digitalRead(ejSensor);
-  if(ejSensorState == HIGH && target == EJECT) {
+  if((ejSensorState == HIGH) && (target == EJECT)) {
     stopMove();
   }
-  if(inSensorState == HIGH && target == INSERT) {
+  if((inSensorState == HIGH) && (target == INSERT)) {
     stopMove();
   }
-  if(inSensorState == LOW && ejSensorState == LOW && (target == PARK || target == PARKEJECT || target == PARKINSERT)) {
+  if((inSensorState == LOW) && (ejSensorState == LOW) && ((target == PARK) || (target == PARKEJECT) || (target == PARKINSERT))) {
     stopMove();
   }
-  if(inSensorState == HIGH && ejSensorState == HIGH) {
+  if((inSensorState == HIGH) && (ejSensorState == HIGH)) {
     curr = ERROR;
     eject();
   }

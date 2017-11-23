@@ -55,6 +55,50 @@ void printStatus() {
   }
 }
 
+void printDebug() {
+  Serial.println("current:");
+  printStatus();
+  Serial.println("eject sensor:");
+  if(digitalRead(ejSensor) == HIGH) {
+    Serial.println("  high");
+  } else {
+    Serial.println("  low");
+  }
+  Serial.println("insert sensor:");
+  if(digitalRead(inSensor) == HIGH) {
+    Serial.println("  high");
+  } else {
+    Serial.println("  low");
+  }
+  Serial.println("target:");
+  switch(target) {
+    case STOPPED:
+      Serial.println("stopped");
+      break;
+    case EJECTED:
+      Serial.println("ejected");
+      break;
+    case INSERTED:
+      Serial.println("inserted");
+      break;
+    case PARKED:
+      Serial.println("parked");
+      break;
+    case MOVING_LEFT:
+      Serial.println("moving left");
+      break;
+    case MOVING_RIGHT:
+      Serial.println("moving right");
+      break;
+    case ERROR:
+      Serial.println("error");
+      break;
+    default:
+      Serial.println("unknown state");
+      break;
+  }
+}
+
 void turnLeft() {
   analogWrite(engineRight, 0);
   analogWrite(engineLeft, turnSpeed);
@@ -184,6 +228,10 @@ void loop() {
         } else {
           target = INSERT;
         }
+        break;
+      case 'd':
+        printDebug();
+        printed=1;
         break;
       case 'e':
         if (target == INSERT && curr == EJECTED) {
